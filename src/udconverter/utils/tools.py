@@ -3,8 +3,9 @@ import re
 import requests
 import json
 
-from lib.rules import cconj, relation_NP, relation_IP, relation_CP, abbr_map
-from lib.reader import IndexedCorpusTree
+from ..static.rules import cconj, relation_NP, relation_IP, relation_CP, abbr_map
+
+# from utils.reader import IndexedCorpusTree
 
 
 def determine_relations(mod_tag, mod_func, head_tag, head_func, node):
@@ -189,7 +190,11 @@ def determine_relations(mod_tag, mod_func, head_tag, head_func, node):
         return relation_CP.get(mod_func, "VANTAR_LIÐ")
     elif mod_tag == "st":
         return "cc"
-    elif mod_tag in {"C", "CP", "TO",} and (
+    elif mod_tag in {
+        "C",
+        "CP",
+        "TO",
+    } and (
         node["lemma"] == "og"
         or node["lemma"] == "eða"
         or node["lemma"] == "en"

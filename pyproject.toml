@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "udconverter"
+version = "0.1.0"
+description = "Fork of UDConverter"
+authors = ["hinrikur <hinrik.hafst@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+nltk = "3.8.1"
+requests = "2.31.0"
+pyconll = "2.2.0"
+reynir = "^3.5.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -606,7 +606,6 @@ class NodeJoiner:
         if re.search(det_token, self.lines[index]) and re.search(
             noun_trail, self.lines[index]
         ):
-
             # print('\t', prev, self.lines[prev].strip())
             # print('\t', index, self.lines[index].strip())
             # print('\t', next, self.lines[next].strip())
@@ -629,7 +628,6 @@ class NodeJoiner:
             and not re.search(noun_trail, self.lines[index])
             and re.search(noun_trail, self.lines[prev])
         ):
-
             # print('\t', prev, self.lines[prev].strip())
             # print('\t', index, self.lines[index].strip())
             # print('\t', next, self.lines[next].strip())
@@ -650,7 +648,6 @@ class NodeJoiner:
         elif re.search(det_token, self.lines[index]) and re.search(
             noun_token_incompl, self.lines[index]
         ):
-
             # print('\t', prev, self.lines[prev].strip())
             # print('\t', index, self.lines[index].strip())
             # print('\t', next, self.lines[next].strip())
@@ -754,7 +751,6 @@ class NodeJoiner:
             return self
 
         elif re.search(tags_33, self.lines[index]):
-
             match = self.lines[index]
 
             token_31 = re.sub(
@@ -1487,7 +1483,6 @@ class NodeJoiner:
         return
 
     def fix_joined_space_after(self, index):
-
         curr_line, token_end_line = self.lines[index].split("\t"), self.lines[
             index + 2
         ].split("\t")
@@ -1705,7 +1700,6 @@ class FileWriter:
 
 
 if __name__ == "__main__":
-
     for file in os.listdir("../../corpora/GreynirCorpus/testset/psd"):
         # for file in os.listdir('testing/CoNLLU_output'):
         # IN_FILE = os.path.join('testing/CoNLLU_output', file)

@@ -1,10 +1,11 @@
-import re
-import sys
+import logging
 
-from nltk.corpus.reader import CategorizedBracketParseCorpusReader
 from nltk.tree import Tree
+from reynir.simpletree import SimpleTree
 
-from lib.joiners import NodeJoiner
+from ..utils.joiners import NodeJoiner
+
+logger = logging.getLogger(__name__)
 
 
 class IndexedCorpusTree(Tree):
@@ -42,40 +43,49 @@ class IndexedCorpusTree(Tree):
         """
         Extension of parent class method to check for ID tag and
         """
-        # block for joining seperated nodes in the IcePaHC tree structure
-        #     if preprocess == True:
-        # print('\n'.join(s.split('\n')))
-        #         j = NodeJoiner(s.split('\n'))
-        # print('\n'.join(j.lines))
-        #         for n in j.indexes:
-        # Adverbs and various small nodes processed
-        #             j.join_adverbs(n)
-        # ADD METHOD HERE for fixing various nodes
-        # NPs processed
-        #             j.join_NPs(n)
-        # j.join_split_nodes(n) # NOTE: tentatively removed because error
-
-        # verbs processed
-        #             j.join_verbs_same_line(n)
-        #             j.join_verbs_two_lines(n)
-        #             j.join_verbs_three_lines(n)
-        # adjectives processed
-        #             j.join_adjectives(n)
-        s = s.split("\n")
         j = NodeJoiner(s)
-        # j = NodeJoiner(s.split("\n"))
-        # j.lines = j.lines[:-1]
         s = "\n".join(j.lines)
         if not s == "":
             tree = super().fromstring(s)
-            # if trim_id_tag and tree._label == "" and len(tree) == 2:
-            #    tree[0].corpus_id = str(tree[1]).strip("()ID ")
-            #    try:
-            #        tree[0].corpus_id_num = str(tree[1]).strip("()ID ").split(",")[1]
-            #    except IndexError:
-            #        tree[0].corpus_id_num = None
             tree = tree[1]
             return tree
+
+    @classmethod
+    def from_simple_tree(cls, simple_tree: SimpleTree):
+        """
+        Class method to convert a Greynir SimpleTree instance to an IndexedCorpusTree.
+
+        Args:
+            simple_tree (SimpleTree): The SimpleTree instance to convert.
+
+        Returns:
+            IndexedCorpusTree: The converted tree as an IndexedCorpusTree instance.
+        """
+
+        tag_map = {
+            "PUNCTUATION": "grm",
+        }
+
+        if simple_tree.is_terminal:
+            logger.debug(f"Terminal: {simple_tree.terminal}")
+            # For terminals, use the terminal string as the node label
+            tag = (
+                simple_tree.terminal
+                if simple_tree.terminal
+                else tag_map.get(simple_tree.kind, simple_tree.kind)
+            )
+            text = simple_tree.text
+            lemma = cls("lemma", [simple_tree.lemma]) if simple_tree.lemma else None
+            return cls(tag, [text, lemma])
+        else:
+            # For non-terminals, use the tag as the node label
+            logger.debug(f"Non-terminal: {simple_tree.tag}")
+            logger.debug(f"Num children: {len(list(simple_tree.children))}\n")
+            # For non-terminals, recursively convert each child
+            children = [cls.from_simple_tree(child) for child in simple_tree.children]
+            # Use the SimpleTree's tag as the node label
+            # logger.debug(f"Output tree: {cls(simple_tree.tag, children)}")
+            return cls(simple_tree.tag, children)
 
     def id(self):
         """
@@ -217,7 +227,6 @@ class IndexedCorpusTree(Tree):
                     except IndexError:
                         continue
             for parent, child in pairs_to_delete:
-
                 try:
                     self[parent].remove(self[child])
                 except:
@@ -270,7 +279,6 @@ class IndexedCorpusTree(Tree):
         count = 0
         for i in reversed(self.treepositions()):
             if isinstance(self[i], Tree) and self[i].label() == "lemma":
-
                 if len(self[i]) == 2 and self[i].height() == 2:
                     self[list(reversed(self.treepositions()))[count + 1]] = (
                         self[list(reversed(self.treepositions()))[count + 1]]
@@ -358,7 +366,6 @@ class IndexedCorpusTree(Tree):
 
         count = 0
         for i in reversed(self.treepositions()):
-
             if (
                 isinstance(self[i], Tree)
                 and len(self[i]) == 2
@@ -368,7 +375,6 @@ class IndexedCorpusTree(Tree):
                     list(reversed(self.treepositions()))[count - 1]
                 ]  # The phrase hasn't gone through if loop before      # TODO: doesn't have an impact, all tokens have +lemma+
             ):
-
                 self[list(reversed(self.treepositions()))[count - 1]] = (
                     self[list(reversed(self.treepositions()))[count - 1]]
                     + "+"
@@ -384,7 +390,6 @@ class IndexedCorpusTree(Tree):
                     list(reversed(self.treepositions()))[count - 1]
                 ]  # The phrase hasn't gone through if loop before
             ):
-
                 self[list(reversed(self.treepositions()))[count - 1]] = (
                     self[list(reversed(self.treepositions()))[count - 1]]
                     + "+"
@@ -444,7 +449,6 @@ class IndexedCorpusTree(Tree):
                     list(reversed(self.treepositions()))[count - 1]
                 ]  # The phrase hasn't gone through if loop before
             ):
-
                 # Six-word phrase
                 self[list(reversed(self.treepositions()))[count - 1]] = (
                     self[list(reversed(self.treepositions()))[count - 1]]
@@ -480,49 +484,3 @@ class IndexedCorpusTreeError(Exception):
             return "IndexedCorpusTreeError: {0}".format(self.message)
         else:
             return "IndexedCorpusTreeError has been raised"
-
-
-class IcePaHCFormatReader(CategorizedBracketParseCorpusReader):
-    """24.03.20
-
-    Extension of the NLTK CategorizedBracketParseCorpusReader class for reading mostly unedited files from the IcePaHC corpus
-    See NLTK: https://www.nltk.org/_modules/nltk/corpus/reader/bracket_parse.html#CategorizedBracketParseCorpusReader
-    See IcePaHC: https://linguist.is/icelandic_treebank/Icelandic_Parsed_Historical_Corpus_(IcePaHC)
-
-    """
-
-    def __init__(self, *args, **kwargs):
-        CategorizedBracketParseCorpusReader.__init__(self, *args, **kwargs)
-
-    def _parse(self, t):
-        try:
-            tree = IndexedCorpusTree.fromstring(
-                t, remove_empty_top_bracketing=False, trim_id_tag=True, preprocess=True
-            ).remove_nodes(tags=["CODE"], trace=True)
-            # # If there's an empty node at the top, strip it off
-            # if tree.label() == '' and len(tree) == 2:
-            #     tree[0].corpus_id = str(tree[1]).strip('()ID ')
-            #     tree[0].corpus_id_num = str(tree[1]).strip('()ID ').split(',')[1]
-            #     return tree[0]
-            # else:
-            #     return tree
-            return tree
-
-        except ValueError as e:
-            sys.stderr.write("Bad tree detected; trying to recover...\n")
-            sys.stderr.write(t)
-            # Try to recover, if we can:
-            if e.args == ("mismatched parens",):
-                for n in range(1, 5):
-                    try:
-                        v = IndexedCorpusTree(self._normalize(t + ")" * n))
-                        sys.stderr.write(
-                            "  Recovered by adding %d close " "paren(s)\n" % n
-                        )
-                        return v
-                    except ValueError:
-                        pass
-            # Try something else:
-            sys.stderr.write("  Recovered by returning a flat parse.\n")
-            # sys.stderr.write(' '.join(t.split())+'\n')
-            return IndexedCorpusTree("S", self._tag(t))

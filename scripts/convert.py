@@ -125,7 +125,6 @@ def main():
             file_id += ".psd"
 
     if args.NO_CORPUS:
-
         c = depender.Converter()
 
         file_num = 0
@@ -371,13 +370,11 @@ def main():
             run_post_file(output_path)
 
     if args.corpus:
-
         c = depender.Converter()
 
         fileids = CORPUS.fileids()
 
         for file_id in fileids:
-
             print(f"> Converting {file_id} ...", end="\r")
 
             to_join = []
@@ -405,12 +402,10 @@ def main():
                 )
 
             with open(output_path, "w") if args.output else stdout as outfile:
-
                 # counter set for missing tree IDs in corpus
                 missing_id_counter = 0
 
                 for tree in CORPUS.parsed_sents(file_id):
-
                     # counter for missing IDs incremented for every tree in corpus
                     missing_id_counter += 1
 
@@ -431,7 +426,6 @@ def main():
                     else:
                         try:
                             if len(to_join) == 0:
-
                                 # sentence ID saved as string using file_sent runner
                                 sent_id = (
                                     re.sub(r"(\.psd\.gld)", "", file_id).upper()

@@ -14,9 +14,10 @@ import requests
 
 from collections import defaultdict
 
-from lib.rules import cconj, GC_UD_map, Greynir_map
-from lib import fo_rules
-from lib.tools import decode_escaped
+from ..static.rules import cconj, GC_UD_map, Greynir_map
+
+# from lib import fo_rules
+# from lib.tools import decode_escaped
 
 
 class G_Features:
@@ -87,7 +88,6 @@ class FeatureExtractionError(Exception):
 
 
 if __name__ == "__main__":
-
     in_dir = "testing/CoNLLU_output/"
     # in_path = 'testing/CoNLLU_output/1985.sagan.nar-fic.conllu'
 
