@@ -57,6 +57,10 @@ def create_dependency_graph(ud_graph, tree):
 
     finalize_dependency_graph(ud_graph, singles, tree)
 
+    # cleanup
+    const.clear()
+    tag_list.clear()
+
     return ud_graph
 
 
@@ -79,11 +83,11 @@ def identify_tree_type(tree):
     return (
         "IndexedCorpusTree"
         if isinstance(tree, IndexedCorpusTree)
-        else "Greynir SimpleTree"
-        if isinstance(tree, SimpleTree)
-        else "string"
-        if isinstance(tree, str)
-        else None
+        else (
+            "Greynir SimpleTree"
+            if isinstance(tree, SimpleTree)
+            else "string" if isinstance(tree, str) else None
+        )
     )
 
 
