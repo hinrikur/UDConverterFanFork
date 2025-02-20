@@ -1,39 +1,24 @@
-# Treebank format converter
-Version 1.0
+# 🍴 UDConverter Fan Fork
+**Interim version 0.1.1**
 
-A Python module for converting the [GreynirCorpus](https://github.com/mideind/GreynirCorpus) treebank to the [Universal Dependencies](https://universaldependencies.org/) framework. The module has been adapted from [UDConverter](https://github.com/thorunna/UDConverter).
+This Python package is a fork of the [UDConverter](https://github.com/thorunna/UDConverter) module, specifically the [UDconverter-GreynirCorpus](https://github.com/thorunna/UDConverter-GreynirCorpus) version of the module.
 
-The resulting UD treebank will be included in UD version 2.11.
+The package provides methods, tools and settings to automatically convert constituency-based syntax trees (either [IcePaHC format](https://linguist.is/wiki/index.php?title=Icelandic_Parsed_Historical_Corpus_(IcePaHC)) or [GreynirCorpus format](https://github.com/mideind/GreynirCorpus)) to the [Universal Dependencies](https://universaldependencies.org/) framework.
+
+Although in (sporadic) development, **this package is only partially applicable for converting Icelandic treebanks to the UD framework** and is thus made available as is.
+
+## Fork Purpose
+The aim of this fork is to partially rebuild the original converter, to better expose individual parts of its functionality. 
+
+In this approach, UDConverter can be installed as an individual package via pip, and specific methods can be imported and used in other projects as needed.
 
 ## Setup
 
-Install all requirements by running: 
+The interim release of the package can be 
 
-`pip install -r requirements.txt`
-
-## Usage
-
-Scripts to run are in the `scripts` folder.
-
-_In all examples below, the_ `--output` _flag is used to write to files in the_ `/CoNLLU/` _output folder. Otherwise prints to standard output._
-
-*Convert single file or directory of files:*
-
-> `convert.py -N -i path/to/corpus/file.psd --output --post_process`
-
-> `convert.py -N -i path/to/corpus/* --output --post_process`
-
-_For further usage, input files must be placed in a folder within the_ `corpora` _folde:r_
-
-*Convert single tree in treebank using sentence ID (only prints to standard output):*
-
-> `convert.py -C FOLDER_NAME -id SENTENCE_ID`
-
-*Convert single file in treebank*
-
-> `convert.py -C FOLDER_NAME -f FILE_NAME --output --post_process`
+`pip install git+https://github.com/hinrikur/UDConverterFanFork.git@v0.1.1-interim`
 
 
 ## Acknowledgements
 
-This converter was adapted as part of the Language Technology Programme for Icelandic 2019-2023. The programme, which is managed and coordinated by Almannarómur (https://almannaromur.is/), is funded by the Icelandic Ministry of Education, Science and Culture.
+UDConverter is part of the UniTree project for IcePaHC, funded by The Strategic Research and Development Programme for Language Technology, grant no. 180020-5301. The original converter was improved and adapted to the GreynirCorpus format as part of the Language Technology Programme for Icelandic 2019-2023. The programme, which was managed and coordinated by Almannarómur (https://almannaromur.is/), was funded by the Icelandic Ministry of Education, Science and Culture.
