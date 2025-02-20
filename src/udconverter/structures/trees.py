@@ -3,7 +3,7 @@ import logging
 from nltk.tree import Tree
 from reynir.simpletree import SimpleTree
 
-from ..utils.joiners import NodeJoiner
+from ..utils.ppche_processing import NodeJoiner
 
 logger = logging.getLogger(__name__)
 

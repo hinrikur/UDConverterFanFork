@@ -4,7 +4,7 @@ import re
 from collections import defaultdict
 from nltk.parse import DependencyGraph
 
-from ..utils.joiners import NodeJoiner
+from ..utils.ppche_processing import NodeJoiner
 from ..utils.tools import decode_escaped
 from ..utils.conversion import create_dependency_graph
 
