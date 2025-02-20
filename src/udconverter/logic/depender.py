@@ -16,7 +16,8 @@ from nltk.tree import Tree
 
 
 from .features import G_Features
-from ..structures.graphs import IndexedCorpusTree, UniversalDependencyGraph
+from ..structures.graphs import UniversalDependencyGraph
+from ..structures.trees import IndexedCorpusTree
 from ..static.rules import head_rules
 from ..utils.tools import determine_relations
 from ..utils import dg_utils

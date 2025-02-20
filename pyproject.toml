@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "udconverter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Fork of UDConverter"
 authors = ["hinrikur <hinrik.hafst@gmail.com>"]
 readme = "README.md"

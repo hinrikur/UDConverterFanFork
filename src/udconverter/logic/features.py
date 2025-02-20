@@ -6,18 +6,13 @@ The conversion builds on information from existing tags if a third-party tagger 
 is not used. If so, the tagger's output is converted to the proper format.
 
 """
+
 import os
-import re
-import json
 import string
-import requests
 
 from collections import defaultdict
 
 from ..static.rules import cconj, GC_UD_map, Greynir_map
-
-# from lib import fo_rules
-# from lib.tools import decode_escaped
 
 
 class G_Features:

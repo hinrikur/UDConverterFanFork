@@ -1,6 +1,5 @@
 import argparse
 import os
-import re
 from sys import stdin, stdout
 
 from nltk.data import path as nltk_path
